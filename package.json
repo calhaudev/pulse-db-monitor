@@ -8,7 +8,7 @@
     "name": "Rafael Calhau"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/app.ts",
     "start": "node dist/app.js",
     "ts:check": "tsc --noEmit"
@@ -25,6 +25,7 @@
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
+    "tsup": "^8.5.0",
     "typescript": "^5.3.2"
   },
   "license": "MIT"
