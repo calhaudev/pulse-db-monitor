@@ -27,7 +27,7 @@ export class CheckDiskUsage implements BaseHealthCheck {
       threshold: config.THRESHOLD_DB_SIZE,
       description: `${
         warning ? "⚠️" : "✅"
-      } ${label}: ${value}Mb / Threshold: ${config.THRESHOLD_DB_SIZE})`,
+      } ${label}: ${value}Mb / Threshold: ${config.THRESHOLD_DB_SIZE}Mb)`,
       responseTime: (Date.now() - start) / 1000,
       timestamp: new Date().toISOString(),
     };
