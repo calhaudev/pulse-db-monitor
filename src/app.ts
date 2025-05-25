@@ -11,21 +11,41 @@ import { CheckReplicationLag } from "./domain/usecases/CheckReplicationLag";
 
 const fastify = Fastify();
 const dbService = new DatabaseServiceImpl();
-const checker = new CheckDatabaseHealth(dbService);
+const dbConnectionChecker = new CheckDatabaseHealth(dbService);
 const notifier = new EmailNotifier();
 const fullHealthCheck = new RunFullHealthCheck(
   [
-    new CheckDatabaseHealth(dbService),
-    new CheckConnectionCount(dbService),
-    new CheckDiskUsage(dbService, config.DB_NAME),
-    new CheckReplicationLag(dbService),
-    new CheckSlowQueries(dbService),
+    {
+      active: true,
+      check: new CheckDatabaseHealth(dbService),
+      name: "CheckDatabaseHealth",
+    },
+    {
+      active: true,
+      check: new CheckConnectionCount(dbService),
+      name: "CheckConnectionCount",
+    },
+    {
+      active: true,
+      check: new CheckDiskUsage(dbService, config.DB_NAME),
+      name: "CheckDiskUsage",
+    },
+    {
+      active: true,
+      check: new CheckSlowQueries(dbService),
+      name: "CheckSlowQueries",
+    },
+    {
+      active: config.CHECK_REPLICATION_LAG,
+      check: new CheckReplicationLag(dbService),
+      name: "CheckReplicationLag",
+    },
   ],
   notifier
 );
 
 const runHealthCheck = async () => {
-  const metric = await checker.execute();
+  const metric = await dbConnectionChecker.execute();
   await notifier.notify([metric]);
   return metric;
 };

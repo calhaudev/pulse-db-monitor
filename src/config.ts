@@ -10,6 +10,14 @@ const envSchema = z.object({
   DB_PASSWORD: z.string(),
   DB_NAME: z.string(),
   CHECK_INTERVAL_MS: z.coerce.number().default(60000),
+  CHECK_REPLICATION_LAG: z
+    .preprocess((val) => {
+      if (typeof val === "string") {
+        return val.toLowerCase() === "true";
+      }
+      return val;
+    }, z.boolean())
+    .default(false),
   SES_REGION: z.string(),
   SES_ACCESS_KEY: z.string(),
   SES_SECRET_KEY: z.string(),

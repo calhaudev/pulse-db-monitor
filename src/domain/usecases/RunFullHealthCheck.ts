@@ -2,9 +2,15 @@ import { HealthMetric } from "@entities/HealthMetric";
 import { BaseHealthCheck } from "@ports/BaseHealthCheck";
 import { EmailNotifier } from "@ports/EmailNotifier";
 
+type Metric = {
+  active: boolean;
+  name: string;
+  check: BaseHealthCheck;
+};
+
 export class RunFullHealthCheck {
   constructor(
-    private readonly checks: BaseHealthCheck[],
+    private readonly checks: Metric[],
     private readonly notifier: EmailNotifier
   ) {}
 
@@ -12,15 +18,18 @@ export class RunFullHealthCheck {
     const results: HealthMetric[] = [];
     const hasWarnings = results.some((metric) => metric.warning);
 
-    for (const check of this.checks) {
+    for (const { active, check, name } of this.checks) {
+      if (!active) continue;
       const start = Date.now();
+
       try {
         results.push(await check.execute());
       } catch (err) {
         console.log(err);
+        const label = `Check failure: ${name}`;
         results.push({
-          label: "Unknown check failure",
-          description: "⚠️ Unknown check failure",
+          label,
+          description: `⚠️ ${label}`,
           timestamp: new Date().toISOString(),
           responseTime: (Date.now() - start) / 1000,
           value:
