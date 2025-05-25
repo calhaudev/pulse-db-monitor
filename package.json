@@ -1,0 +1,31 @@
+{
+  "name": "pulse-db-monitor",
+  "version": "1.0.0",
+  "description": "Database Health Monitor with Fastify and TypeScript",
+  "main": "dist/app.js",
+  "author": {
+    "email": "calhaudev@gmail.com",
+    "name": "Rafael Calhau"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/app.ts",
+    "start": "node dist/app.js",
+    "ts:check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ses": "^3.450.0",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.24.3",
+    "mysql2": "^3.6.5",
+    "zod": "^3.25.28"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.3.2"
+  },
+  "license": "MIT"
+}
