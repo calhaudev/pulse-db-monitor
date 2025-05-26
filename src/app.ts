@@ -54,18 +54,22 @@ const runFullhealthCheck = async (notifyWithWarningsOnly: boolean) => {
   const start = Date.now();
   return await fullHealthCheck
     .execute(notifyWithWarningsOnly)
-    .then(() =>
+    .then((results) => {
       console.log(
         `Full health check ran at ${new Date()}, during ${
           (Date.now() - start) / 1000
         }s`
-      )
-    )
+      );
+      console.log(results);
+    })
     .catch((err) => console.log(err.message));
 };
 
 // Schedule internal interval
-setInterval(() => runFullhealthCheck(true), config.CHECK_INTERVAL_MS);
+setInterval(
+  () => runFullhealthCheck(config.NOTIFY_ONLY_WITH_WARNS),
+  config.CHECK_INTERVAL_MS
+);
 
 fastify.get("/health-check", async () => {
   return await runHealthCheck();

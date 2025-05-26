@@ -18,6 +18,14 @@ const envSchema = z.object({
       return val;
     }, z.boolean())
     .default(false),
+  NOTIFY_ONLY_WITH_WARNS: z
+    .preprocess((val) => {
+      if (typeof val === "string") {
+        return val.toLowerCase() === "true";
+      }
+      return val;
+    }, z.boolean())
+    .default(true),
   SES_REGION: z.string(),
   SES_ACCESS_KEY: z.string(),
   SES_SECRET_KEY: z.string(),
