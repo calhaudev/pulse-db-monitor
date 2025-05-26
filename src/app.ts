@@ -51,7 +51,17 @@ const runHealthCheck = async () => {
 };
 
 const runFullhealthCheck = async (notifyWithWarningsOnly: boolean) => {
-  return await fullHealthCheck.execute(notifyWithWarningsOnly);
+  const start = Date.now();
+  return await fullHealthCheck
+    .execute(notifyWithWarningsOnly)
+    .then(() =>
+      console.log(
+        `Full health check ran at ${new Date()}, during ${
+          (Date.now() - start) / 1000
+        }s`
+      )
+    )
+    .catch((err) => console.log(err.message));
 };
 
 // Schedule internal interval
